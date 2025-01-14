@@ -76,3 +76,18 @@ function hb_increase_admin_memory_limit() {
 	}
 }
 add_action( 'admin_init', 'hb_increase_admin_memory_limit' );
+
+/**
+ * Purges SpinupWP cache when saving ACF options page.
+ *
+ * @param string $post_id   The ID of the current post being saved.
+ * @param string $menu_slug The slug of the ACF options page.
+ *
+ * @return void
+ */
+function hb_acf_save_options_page( $post_id, $menu_slug ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter
+	if ( function_exists( 'spinupwp' ) ) {
+		spinupwp()->cache->purge_page_cache();
+	}
+}
+add_action( 'acf/options_page/save', 'hb_acf_save_options_page', 10, 2 );
